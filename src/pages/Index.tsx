@@ -17,10 +17,49 @@ const Index = () => {
   const [bookingName, setBookingName] = useState('');
   const [bookingPhone, setBookingPhone] = useState('');
   const [bookingActivity, setBookingActivity] = useState('');
+  const [bookingMessage, setBookingMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Заявка принята!\nИмя: ${bookingName}\nТелефон: ${bookingPhone}\nДень: ${bookingDay}\nВремя: ${bookingTime}\nЗанятие: ${bookingActivity}`);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/97c6bd3b-984f-4773-90ef-393bb0e1b117', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: bookingName,
+          phone: bookingPhone,
+          activity: bookingActivity,
+          day: bookingDay,
+          time: bookingTime,
+          message: bookingMessage
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(`✅ Заявка успешно отправлена!\n\nМы получили вашу заявку и свяжемся с вами в ближайшее время.\n\nДетали записи:\n${data.booking.activity}\n${data.booking.day}, ${data.booking.time}`);
+        
+        setBookingName('');
+        setBookingPhone('');
+        setBookingActivity('');
+        setBookingDay('');
+        setBookingTime('');
+        setBookingMessage('');
+      } else {
+        alert('❌ Ошибка при отправке заявки. Попробуйте еще раз.');
+      }
+    } catch (error) {
+      console.error('Booking error:', error);
+      alert('❌ Ошибка соединения. Проверьте интернет и попробуйте снова.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -216,12 +255,20 @@ const Index = () => {
                   
                   <div>
                     <h4 className="font-semibold text-xl mb-3 text-secondary">Полезные материалы</h4>
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                    <div className="flex gap-3 flex-wrap">
+                      <Button 
+                        variant="outline" 
+                        className="border-bronze text-bronze hover:bg-bronze/10"
+                        onClick={() => window.open('https://www.youtube.com/watch?v=LFHHq3UxlKY', '_blank')}
+                      >
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Основы техники
                       </Button>
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                      <Button 
+                        variant="outline" 
+                        className="border-bronze text-bronze hover:bg-bronze/10"
+                        onClick={() => window.open('https://www.youtube.com/watch?v=qZHs7VgqzcM', '_blank')}
+                      >
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Дыхание при стрельбе
                       </Button>
@@ -284,12 +331,12 @@ const Index = () => {
                   
                   <div>
                     <h4 className="font-semibold text-xl mb-3 text-secondary">Полезные материалы</h4>
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=vN69WGMyogM', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Правильная стойка
                       </Button>
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=ydKJMd9pGKI', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Техника броска
                       </Button>
@@ -356,12 +403,12 @@ const Index = () => {
                   
                   <div>
                     <h4 className="font-semibold text-xl mb-3 text-secondary">Полезные материалы</h4>
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=F3LJk4R9H7Q', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Хват и бросок
                       </Button>
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=0oqU3RqYGRY', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Безоборотное метание
                       </Button>
@@ -429,12 +476,12 @@ const Index = () => {
                   
                   <div>
                     <h4 className="font-semibold text-xl mb-3 text-secondary">Полезные материалы</h4>
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=WCyiX4Xx9wI', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Неполная разборка АК-74
                       </Button>
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=pPxuMfxvH-g', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Устройство АК-12
                       </Button>
@@ -502,12 +549,12 @@ const Index = () => {
                   
                   <div>
                     <h4 className="font-semibold text-xl mb-3 text-secondary">Полезные материалы</h4>
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=H0ZkKbD5HL4', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Базовые восьмерки
                       </Button>
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=5bkV2F3l7Kc', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Техника мельницы
                       </Button>
@@ -575,12 +622,12 @@ const Index = () => {
                   
                   <div>
                     <h4 className="font-semibold text-xl mb-3 text-secondary">Полезные материалы</h4>
-                    <div className="flex gap-3">
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=LYqKYi4c4Q4', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Наложение жгута
                       </Button>
-                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10">
+                      <Button variant="outline" className="border-bronze text-bronze hover:bg-bronze/10" onClick={() => window.open('https://www.youtube.com/watch?v=ZEZGOmLQnE8', '_blank')}>
                         <Icon name="Youtube" className="mr-2" size={20} />
                         Видео: Транспортировка
                       </Button>
@@ -1017,11 +1064,18 @@ const Index = () => {
                     id="message" 
                     placeholder="Укажите дополнительные пожелания или вопросы" 
                     className="bg-background border-bronze/30 min-h-24"
+                    value={bookingMessage}
+                    onChange={(e) => setBookingMessage(e.target.value)}
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" size="lg">
-                  Отправить заявку
+                <Button 
+                  type="submit" 
+                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90" 
+                  size="lg"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
                 </Button>
               </form>
             </CardContent>
